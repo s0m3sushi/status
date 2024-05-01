@@ -1,0 +1,13 @@
+#!/bin/sh
+
+battery=$(sysctl hw.acpi.battery.life | sed 's/[^0-9]//g')
+consumption=$(sysctl hw.acpi.battery.rate | sed 's/[^0-9]//g;s/.\{3\}$//;s/^/(/;s/$/w)/')
+datetime=$(date '+%R')
+weather=$(curl -s wttr.in/hanoi?format="%c%f" | sed 's/ //g;s/+//g')
+
+if [ "$consumption" == "(0w)" ]
+	then
+		consumption=""
+fi
+
+echo " $weather $consumption$battery% $datetime"
